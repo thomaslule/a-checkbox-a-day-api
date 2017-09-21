@@ -4,11 +4,11 @@ const JournalProjection = class {
   }
 
   onJournalEntryEdited(event) {
-    if (this.entries.filter(entry => entry.day === event.day).length > 0) {
+    if (this.entries.filter(entry => entry.day === event.data.day).length > 0) {
       this.entries = this.entries.map(entry =>
-        (entry.day === event.day ? { day: entry.day, text: event.text } : entry));
+        (entry.day === event.data.day ? { day: entry.day, text: event.data.text } : entry));
     } else {
-      this.entries.push({ day: event.day, text: event.text });
+      this.entries.push({ day: event.data.day, text: event.data.text });
     }
   }
 
