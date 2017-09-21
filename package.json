@@ -12,7 +12,9 @@
   "license": "MIT",
   "dependencies": {
     "body-parser": "^1.18.1",
-    "express": "^4.15.4"
+    "express": "^4.15.4",
+    "express-validator": "^4.2.0",
+    "moment": "^2.18.1"
   },
   "devDependencies": {
     "concurrently": "^3.5.0",

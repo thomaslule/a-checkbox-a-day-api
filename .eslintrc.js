@@ -5,5 +5,8 @@ module.exports = {
     ],
     "env": {
         "jest/globals": true
+    },
+    "rules": {
+        "comma-dangle": 0
     }
 };
