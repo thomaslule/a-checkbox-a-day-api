@@ -1,23 +1,20 @@
-const { check, validationResult } = require('express-validator/check');
-const { matchedData } = require('express-validator/filter');
+const { check } = require('express-validator/check');
 const journal = require('./journal');
 const monthValidator = require('../util/monthValidator');
 const dayValidator = require('../util/dayValidator');
+const validate = require('../util/validate');
+const { badRequestCallback, okCallback } = require('../util/httpResponse');
 
-const journalController = (app, bus, journalProjection) => {
+function journalController(app, bus, journalProjection) {
   app.get(
     '/api/Journal/GetMonthJournal/:month',
     [
       check('month').custom(monthValidator)
     ],
     (req, res) => {
-      const errors = validationResult(req);
-      if (!errors.isEmpty()) {
-        res.status(422).json({ errors: errors.mapped() });
-      } else {
-        const params = matchedData(req);
-        res.json(journalProjection.getJournalForMonth(params.month));
-      }
+      validate(req, res)
+        .then(params => res.json(journalProjection.getJournalForMonth(params.month)))
+        .catch(badRequestCallback(res));
     }
   );
 
@@ -28,16 +25,12 @@ const journalController = (app, bus, journalProjection) => {
       check('text').exists()
     ],
     (req, res) => {
-      const errors = validationResult(req);
-      if (!errors.isEmpty()) {
-        res.status(422).json({ errors: errors.mapped() });
-      } else {
-        const params = matchedData(req);
-        journal.editJournalEntry(bus, params.day, params.text);
-        res.sendStatus(200);
-      }
+      validate(req, res)
+        .then(params => journal.editJournalEntry(bus, params.day, params.text))
+        .then(okCallback(res))
+        .catch(badRequestCallback(res));
     }
   );
-};
+}
 
 module.exports = journalController;
