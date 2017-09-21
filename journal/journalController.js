@@ -12,7 +12,7 @@ function journalController(app, bus, journalProjection) {
       check('month').custom(monthValidator)
     ],
     (req, res) => {
-      validate(req, res)
+      validate(req)
         .then(params => res.json(journalProjection.getJournalForMonth(params.month)))
         .catch(badRequestCallback(res));
     }
@@ -25,7 +25,7 @@ function journalController(app, bus, journalProjection) {
       check('text').exists()
     ],
     (req, res) => {
-      validate(req, res)
+      validate(req)
         .then(params => journal.editJournalEntry(bus, params.day, params.text))
         .then(okCallback(res))
         .catch(badRequestCallback(res));
